@@ -114,19 +114,54 @@ I commented on two lines in your .bashrc. I put "# commented by ZH.2023.10.10" o
 
 3. To enable wags pipeline scripts to use the snakemake env I created in step 1 above, I put a conda initialization block at the bottom of .bashrc. Its purpose is only for running the wag pipeline. You can permanently remove this block from your .bashrc file when you want to.
 
-4. In your /scratch/ss11645/LC/SRA/prefetchData/sra/wags folder, I gave you a file called sourcrME. You will source this file before running pipeline scripts. I will give more details later, after you figured out how to set REF_GENOME (for --ref option) and RESULTS (for --bucket option).
+4. In your /scratch/ss11645/LC/SRA/prefetchData/sra/wags folder, there is a file called sourcrME. You will source this file before running pipeline scripts. 
 
 The .basrc files is given by .basrc
 
-FASTQ to GVCF (OneWAG)
+## FASTQ to GVCF (OneWAG)
 
-The input file is given by input.csv
-
+The input file is given by input.csv.
 FASTQs located in /scratch/ss11645/LC/SRA/prefetchData/sra/download_data/
+We ran prep_subs.py in cluster combining with bash script as slurm_generate.sh.
+```bash
+#!/bin/bash
+#SBATCH --job-name=wags_prep_subs
+#SBATCH --partition=batch
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64gb
+#SBATCH --time=7-00:00:00
+#SBATCH --output=log.%j.out
+#SBATCH --error=log.%j.err
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=ss11645@uga.edu
 
-We ran prep_subs.py in cluster combining with bash script as slurm_generate.sh
+cd $SLURM_SUBMIT_DIR
 
-The scripts will now generate separate pipelines with each pipelines can then be initiated with sbatch ShetlandSheepDog_ERR11203057.one_wag.slurm.
+ml purge
+ml Mamba/23.1.0-4
+
+export PATH=${HOME}/minio-binaries:$PATH
+
+source ~/.bashrc
+conda activate snakemake
+
+python /scratch/ss11645/LC/SRA/prefetchData/sra/wags/wags/prep_subs.py \
+--meta /scratch/ss11645/LC/SRA/prefetchData/sra/download_data/input.csv \
+--fastqs /scratch/ss11645/LC/SRA/prefetchData/sra/download_data/ \
+--ref canfam4 \
+--out /scratch/ss11645/LC/SRA/prefetchData/sra/download_data/out \
+--bucket RESULTS \
+--snake-env snakemake \
+--partition batch \
+--email ss11645@uga.edu \
+--account laclab \
+--remote local \
+--alias MINIO_ALIAS
+```
+
+
+The scripts will now generate separate pipelines with each pipelines can then be initiated with sbatch ShetlandSheepDog_ERR12345678.one_wag.slurm. Here is one example:
 
 ```bash
 #!/bin/bash
