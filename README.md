@@ -162,6 +162,11 @@ The .basrc files is given by .basrc
 ## FASTQ to GVCF (OneWAG)
 
 The input file is given by input.csv.
+
+| dogid      | breed           | gender| fastq_id|
+|------------|-----------------|---|-----------|
+| ERR11203059| ShetlandSheepDog| NA|ERR11203059|
+
 FASTQs located in /scratch/ss11645/LC/SRA/prefetchData/sra/download_data/
 We ran prep_subs.py in cluster combining with bash script as slurm_generate.sh.
 ```bash
