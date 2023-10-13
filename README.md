@@ -4,6 +4,9 @@
 
 Utilizing the pipeline provided by our collaborators, we are able to generate GVCF outputs. Our process involves amalgamating 30 distinct GVCF files. For alignment of the raw data, we've selected the CanFam4 reference genome, a well-established reference for canine genetic research. Detailed protocols and methodologies for this pipeline can be accessed at: https://github.com/jonahcullen/wags. I have procured raw genomic data for both Collies and Shetland Sheepdogs (often referred to as Shelties) from the Sequence Read Archive (SRA). This data was then systematically aligned to CanFam4 using the WAGS pipeline. The result of this alignment is a GVCF file, which we then integrate with other GVCF files. Our overarching objective is to establish a comprehensive reference panel comprising genomes from all accessible Collie and Sheltie samples. This meticulously constructed panel will facilitate the imputation of data from low-pass sequencing or SNP arrays, aligning it with the whole genome sequence.
 
+### Reated paper:
+https://doi.org/10.1093/g3journal/jkad117
+
 
 ## Using GACRC Sapelo2 Cluster
 The required dependencies are as follows:
