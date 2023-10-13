@@ -2,12 +2,8 @@
 
 ## Project Objective:
 
-Use pipeline from collaborators that give GVCF and combine 30 GVCF files.
-The pipeline the collaborators made to align raw data to CanFam4 is the reference genome for the dog we chose to use.  
-The pipeline is: https://github.com/jonahcullen/wags
-I can download raw data from Collies and Shetland Sheepdogs (aka Shelties) deposited into SRA and then use WAGS to align them to CanFam4. It will output a gvcf, which can then be combined with other gvcf files.  
-The ultimate goal is to have a reference panel of all available collie and Sheltie genomes. 
-We could impute low-pass sequencing or SNP array data to the whole genome sequence with this reference panel. 
+Utilizing the pipeline provided by our collaborators, we are able to generate GVCF outputs. Our process involves amalgamating 30 distinct GVCF files. For alignment of the raw data, we've selected the CanFam4 reference genome, a well-established reference for canine genetic research. Detailed protocols and methodologies for this pipeline can be accessed at: https://github.com/jonahcullen/wags. I have procured raw genomic data for both Collies and Shetland Sheepdogs (often referred to as Shelties) from the Sequence Read Archive (SRA). This data was then systematically aligned to CanFam4 using the WAGS pipeline. The result of this alignment is a GVCF file, which we then integrate with other GVCF files. Our overarching objective is to establish a comprehensive reference panel comprising genomes from all accessible Collie and Sheltie samples. This meticulously constructed panel will facilitate the imputation of data from low-pass sequencing or SNP arrays, aligning it with the whole genome sequence.
+
 
 ## Using GACRC Sapelo2 Cluster
 The required dependencies are as follows:
@@ -50,14 +46,15 @@ git clone https://github.com/jonahcullen/wags.git
 Initiate interactive environment:
 interact -c 8 --mem 32gb -p batch
 
-It have installed it on Sapelo2. Its module name is:
+I have installed it on Sapelo2. Its module name is:
 
+```bash
 parallel-fastq-dump/0.6.7-gompi-2022a
-
+```
 When you load it, the SRA-Toolkit/3.0.3-gompi-2022a module and one of its dependencies will be loaded. You can use its --threads option to achieve some-fold performance gain, for example:
-
+```bash
 parallel-fastq-dump --sra-id SRR2244401 --threads 8 --outdir out/ --split-files --gzip
-
+```
 The bash script is named FASTQ.sh
 ```bash
 #!/bin/bash
@@ -79,21 +76,15 @@ parallel-fastq-dump --sra-id ERR11203060 --threads 10 --outdir download_data --s
 
 ### What if Conda/Mamba is not needed?
 
-You can try the following modules to run the Wags pipeline: 
+You can try the following modules to run the Wags pipeline:
+```bash 
 Python/3.10.4-GCCcore-11.3.0
 snakemake/7.22.0-foss-2022a
 PyYAML/6.0-GCCcore-11.3.0
 wget-util/3.2-GCCcore-11.3.0-Python-3.10.4
 XlsxWriter/3.0.8-GCCcore-11.3.0
-
-You don't need Mamba or Conda because they are for installing smakemake and PyYAML, wget, XlsxWriter Python modules, which are already installed as the central modules listed above.
-
-As for Apptainer or Singularity, they are also installed and ready for use on Sapelo2.
-
-So, we have the last two dependencies to handle: snakemake-profiles and MiniIO Client
-
-As for MiniIO Client, you can download and install it in your home dir on Sapelo2, following the instructions given at https://min.io/docs/minio/linux/reference/minio-mc.html :
-
+```
+You don't need Mamba or Conda because they are for installing smakemake and PyYAML, wget, XlsxWriter Python modules, which are already installed as the central modules listed above. As for Apptainer or Singularity, they are also installed and ready for use on Sapelo2. So, we have the last two dependencies to handle: snakemake-profiles and MiniIO Client. As for MiniIO Client, you can download and install it in your home dir on Sapelo2, following the instructions given at https://min.io/docs/minio/linux/reference/minio-mc.html :
 64-bit Intel:
 ```bash
 curl https://dl.min.io/client/mc/release/linux-amd64/mc \
