@@ -66,6 +66,23 @@ parallel-fastq-dump --sra-id SRR2244401 --threads 8 --outdir out/ --split-files 
 
 The bash script is named FASTQ.sh
 
+#!/bin/bash
+#SBATCH --job-name=parallel-fastq-dump_job
+#SBATCH --partition=batch
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=80gb
+#SBATCH --time=120:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=ss11645@uga.edu
+#SBATCH -o slurm_logs/%x_%j.out
+#SBATCH -e slurm_logs/%x_%j.err
+
+ml parallel-fastq-dump/0.6.7-gompi-2022a
+
+parallel-fastq-dump --sra-id ERR11203060 --threads 10 --outdir download_data --split-files --gzip
+
+
 
 
 ### What if Conda/Mamba is not needed?
@@ -127,6 +144,44 @@ We ran prep_subs.py in cluster combining with bash script as slurm_generate.sh
 
 The scripts will now generate separate pipelines with each pipelines can then be initiated with sbatch ShetlandSheepDog_ERR11203057.one_wag.slurm.
 
+#!/bin/bash
+
+
+#SBATCH --job-name=Collie_ERR11223859.one_wag.slurm
+#SBATCH --partition=batch
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=48
+#SBATCH --mem=50gb
+#SBATCH --time=60:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=ss11645@uga.edu
+#SBATCH -o slurm_logs/%j.Collie_ERR11223859.one_wag.out
+#SBATCH -e slurm_logs/%j.Collie_ERR11223859.one_wag.err
+#SBATCH -A laclab
+#SBATCH -p batch
+
+
+source ~/.bashrc
+conda activate snakemake
+cd $SLURM_SUBMIT_DIR
+
+
+FQ_DIR=/scratch/ss11645/LC/SRA/prefetchData/sra/download_data
+PROC_DIR=/scratch/ss11645/LC/SRA/prefetchData/sra/download_data/out 
+
+
+
+# extract reference dict from container
+singularity exec --bind $PWD /home/ss11645/.sif/wags.sif \
+    cp /home/refgen/dog/canfam4/canFam4.dict $PWD
+
+
+snakemake -s one_wag.smk \
+    --use-singularity \
+    --singularity-args "-B $PWD,$REF_DIR,$POP_VCF,$FQ_DIR,$PROC_DIR" \
+    --profile slurm.go_wags \
+    --configfile canfam4_config.yaml \
+    --keep-going
 
 
 
@@ -149,7 +204,6 @@ set -e. Using set -e, the subshell running your job will exit immediately if a c
 
 8. Some useful links
 https://www.biostars.org/p/9498951/ 
-parallel-fastq-dump is a parallel wrapper of NCBI fastq-dump. It also has --gzip option:
 https://github.com/rvalieris/parallel-fastq-dump
 https://github.com/rvalieris/parallel-fastq-dump#micro-benchmark
 
