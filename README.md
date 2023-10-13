@@ -7,47 +7,45 @@ Utilizing the pipeline provided by our collaborators, we are able to generate GV
 
 ## Using GACRC Sapelo2 Cluster
 The required dependencies are as follows:
-•	Python
-•	Mamba or Conda
-•	Snakemake
-•	Snakemake-Profiles
-•	Miscellaneous Python modules pyaml, wget, and xlsxwriter
-•	Apptainer/Singularity
-•	MinIO Client
+1. Python
+2. Mamba or Conda
+3. Snakemake
+4. Snakemake-Profiles
+5. Miscellaneous Python modules pyaml, wget, and xlsxwriter
+6. Apptainer/Singularity
+7. MinIO Client
 
 There are two options for the SRA toolkit in Sapelo2:
-
+```bash
 ml spider SRA-Toolkit
-
+```
 This command will show that currently there are these two versions installed:
-    
-        SRA-Toolkit/3.0.1-centos_linux64
-        SRA-Toolkit/3.0.3-gompi-2022a
-
+```bash    
+SRA-Toolkit/3.0.1-centos_linux64
+SRA-Toolkit/3.0.3-gompi-2022a
+```
 
 Then, load the SRA-Toolkit module and run the commands.
 
 ## Download the container
 wget https://s3.msi.umn.edu/wags/wags.sif
 
-Visualizing the container having reference genome:
+### Visualizing the container having reference genome:
 
+```bash
 interact --mem=10gb -c 4
-
 singularity exec /scratch/ss11645/LC/wags.sif tree /home/refgen/ -L 2
-
-
- Cloning WAGS repository:
+```
+### Cloning WAGS repository:
 git clone https://github.com/jonahcullen/wags.git
 
 
 ## SRA to FASTQ:
-
 Initiate interactive environment:
+```bash
 interact -c 8 --mem 32gb -p batch
-
+```
 I have installed it on Sapelo2. Its module name is:
-
 ```bash
 parallel-fastq-dump/0.6.7-gompi-2022a
 ```
