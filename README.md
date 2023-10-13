@@ -2,20 +2,14 @@
 
 ## Project Objective:
 
-•	Use pipeline from collaborators that give GVCF and combine 30 GVCF files.
-
-•	The pipeline the collaborators made to align raw data to CanFam4 is the reference genome for the dog we chose to use.  
-
-•	The pipeline is: https://github.com/jonahcullen/wags
-
-•	I can download raw data from Collies and Shetland Sheepdogs (aka Shelties) deposited into SRA and then use WAGS to align them to CanFam4. It will output a gvcf, which can then be combined with other gvcf files.  
-
-•	The ultimate goal is to have a reference panel of all available collie and Sheltie genomes. 
-
-•	We could impute low-pass sequencing or SNP array data to the whole genome sequence with this reference panel. 
+Use pipeline from collaborators that give GVCF and combine 30 GVCF files.
+The pipeline the collaborators made to align raw data to CanFam4 is the reference genome for the dog we chose to use.  
+The pipeline is: https://github.com/jonahcullen/wags
+I can download raw data from Collies and Shetland Sheepdogs (aka Shelties) deposited into SRA and then use WAGS to align them to CanFam4. It will output a gvcf, which can then be combined with other gvcf files.  
+The ultimate goal is to have a reference panel of all available collie and Sheltie genomes. 
+We could impute low-pass sequencing or SNP array data to the whole genome sequence with this reference panel. 
 
 ## Using GACRC Sapelo2 Cluster
-
 The required dependencies are as follows:
 •	Python
 •	Mamba or Conda
