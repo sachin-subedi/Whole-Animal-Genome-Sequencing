@@ -65,7 +65,7 @@ When you load it, the SRA-Toolkit/3.0.3-gompi-2022a module and one of its depend
 parallel-fastq-dump --sra-id SRR2244401 --threads 8 --outdir out/ --split-files --gzip
 
 The bash script is named FASTQ.sh
-
+```bash
 #!/bin/bash
 #SBATCH --job-name=parallel-fastq-dump_job
 #SBATCH --partition=batch
@@ -81,9 +81,7 @@ The bash script is named FASTQ.sh
 ml parallel-fastq-dump/0.6.7-gompi-2022a
 
 parallel-fastq-dump --sra-id ERR11203060 --threads 10 --outdir download_data --split-files --gzip
-
-
-
+```
 
 ### What if Conda/Mamba is not needed?
 
@@ -103,6 +101,7 @@ So, we have the last two dependencies to handle: snakemake-profiles and MiniIO C
 As for MiniIO Client, you can download and install it in your home dir on Sapelo2, following the instructions given at https://min.io/docs/minio/linux/reference/minio-mc.html :
 
 64-bit Intel:
+```bash
 curl https://dl.min.io/client/mc/release/linux-amd64/mc \
   --create-dirs \
   -o $HOME/minio-binaries/mc
@@ -112,6 +111,8 @@ export PATH=$PATH:$HOME/minio-binaries/
 
 mc --help  (type "q" to quite_from Zhuofei)
 mc -v
+
+```
 
 As for snakemake-profiles, I think it is optional and you can run the wags pipeline without it (by not using the wags' --profile option).
 
@@ -144,8 +145,8 @@ We ran prep_subs.py in cluster combining with bash script as slurm_generate.sh
 
 The scripts will now generate separate pipelines with each pipelines can then be initiated with sbatch ShetlandSheepDog_ERR11203057.one_wag.slurm.
 
+```bash
 #!/bin/bash
-
 
 #SBATCH --job-name=Collie_ERR11223859.one_wag.slurm
 #SBATCH --partition=batch
@@ -182,9 +183,7 @@ snakemake -s one_wag.smk \
     --profile slurm.go_wags \
     --configfile canfam4_config.yaml \
     --keep-going
-
-
-
+```
 ## Basic Error terms:
 
 1. Please do not load or run the SRA-Toolkit commands directly on the Sapelo2 login node. If you want to run it interactively, please first start an interactive session. For example, use interact --mem=10gb -c 4. 
