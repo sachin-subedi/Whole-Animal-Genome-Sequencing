@@ -93,7 +93,7 @@ interact --mem=10gb -c 4
 #SBATCH -e slurm_logs/%x_%j.err
 
 # Load the SRA Toolkit module
-ml SRA-Toolkit/2.11.0-centos_linux64
+ml  SRA-Toolkit/3.0.1-centos_linux64
 
 # Replace 'SRA_ID_HERE' with the actual SRA ID you want to download
 SRA_ID_HERE="ERR11203059"
