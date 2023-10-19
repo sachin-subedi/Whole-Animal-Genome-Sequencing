@@ -43,7 +43,7 @@ singularity exec /scratch/ss11645/LC/wags.sif tree /home/refgen/ -L 2
 git clone https://github.com/jonahcullen/wags.git
 
 
-## SRA to FASTQ:
+## SRA to FASTQ: (Gives error in later stage)--So this method is not good instead try ```fastq-dump```
 Initiate interactive environment:
 ```bash
 interact -c 8 --mem 32gb -p batch
@@ -73,6 +73,37 @@ The bash script is named FASTQ.sh
 ml parallel-fastq-dump/0.6.7-gompi-2022a
 
 parallel-fastq-dump --sra-id ERR11203060 --threads 10 --outdir download_data --split-files --gzip
+```
+
+## Using ```fastq-dump``` to convert SRA to FASTq 
+```
+interact --mem=10gb -c 4
+```
+```bash
+#!/bin/bash
+#SBATCH --job-name=fastq-dump_job
+#SBATCH --partition=batch
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=10
+#SBATCH --mem=80gb
+#SBATCH --time=120:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=ss11645@uga.edu
+#SBATCH -o slurm_logs/%x_%j.out
+#SBATCH -e slurm_logs/%x_%j.err
+
+# Load the SRA Toolkit module
+ml SRA-Toolkit/2.11.0-centos_linux64
+
+# Replace 'SRA_ID_HERE' with the actual SRA ID you want to download
+SRA_ID_HERE="ERR11203059"
+
+# Define the output directory
+OUTPUT_DIR="download_data"
+
+# Use fastq-dump to download SRA data
+fastq-dump --split-files --gzip --outdir "$OUTPUT_DIR" "$SRA_ID_HERE"
+
 ```
 
 ### What if Conda/Mamba is not needed?
