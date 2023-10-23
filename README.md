@@ -200,41 +200,38 @@ The input file is given by input.csv.
 FASTQs located in /scratch/ss11645/LC/SRA/prefetchData/sra/download_data/
 We ran prep_subs.py in cluster combining with bash script as slurm_generate.sh.
 ```bash
-#!/bin/bash -l
-#SBATCH --job-name=ShetlandSheepDog_ERR11203059.one_wag.slurm
+#!/bin/bash
+#SBATCH --job-name=wags_prep_subs
 #SBATCH --partition=batch
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=48
-#SBATCH --mem=50gb
-#SBATCH --time=60:00:00
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=1gb
+#SBATCH --time=7-00:00:00
+#SBATCH --output=log.%j.out
+#SBATCH --error=log.%j.err
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=ss11645@uga.edu
-#SBATCH -o slurm_logs/%j.ShetlandSheepDog_ERR11203059.one_wag.out
-#SBATCH -e slurm_logs/%j.ShetlandSheepDog_ERR11203059.one_wag.err
-#SBATCH -A laclab
-#SBATCH -p batch
 
+cd $SLURM_SUBMIT_DIR
+
+ml purge
+ml Mamba/23.1.0-4
+
+export PATH=${HOME}/minio-binaries:$PATH
 
 source ~/.bashrc
 conda activate snakemake
-cd $SLURM_SUBMIT_DIR
 
-export _JAVA_OPTIONS=-Djava.io.tmpdir=/scratch/ss11645/LC/SRA/prefetchData/sra/wags2/DTA/download_data/out/.fastq/ShetlandSheepDog/ERR11203059/.tmp
-FQ_DIR=/scratch/ss11645/LC/SRA/prefetchData/sra/wags2/DTA/download_data
-PROC_DIR=/scratch/ss11645/LC/SRA/prefetchData/sra/wags2/DTA/download_data/out 
-
-# extract reference dict from container
-singularity exec --bind $PWD /home/ss11645/.sif/wags.sif \
-    cp /home/refgen/dog/canfam4/canFam4.dict $PWD
-
-
-snakemake -s one_wag.smk \
-    --use-singularity \
-    --singularity-args "-B $PWD,$REF_DIR,$POP_VCF,$FQ_DIR,$PROC_DIR" \
-    --profile slurm.go_wags \
-    --configfile canfam4_config.yaml \
-    --keep-going
-
+python /scratch/ss11645/LC/SRA/prefetchData/sra/wags2/wags/wags/prep_subs.py \
+--meta /scratch/ss11645/LC/SRA/prefetchData/sra/wags2/DTA/download_data/input.csv \
+--fastqs /scratch/ss11645/LC/SRA/prefetchData/sra/wags2/DTA/download_data/ \
+--ref canfam4 \
+--out /scratch/ss11645/LC/SRA/prefetchData/sra/wags2/DTA/download_data/out \
+--bucket RESULTS \
+--snake-env snakemake \
+--partition batch \
+--email ss11645@uga.edu \
+--account laclab \
 ```
 
 
