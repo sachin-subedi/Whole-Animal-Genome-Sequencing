@@ -3,7 +3,7 @@
 #SBATCH --partition=batch
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --mem=64gb
+#SBATCH --mem=1gb
 #SBATCH --time=7-00:00:00
 #SBATCH --output=log.%j.out
 #SBATCH --error=log.%j.err
@@ -20,17 +20,15 @@ export PATH=${HOME}/minio-binaries:$PATH
 source ~/.bashrc
 conda activate snakemake
 
-python /scratch/ss11645/LC/SRA/prefetchData/sra/wags/wags/prep_subs.py \
---meta /scratch/ss11645/LC/SRA/prefetchData/sra/download_data/input.csv \
---fastqs /scratch/ss11645/LC/SRA/prefetchData/sra/download_data/ \
+python /scratch/ss11645/LC/SRA/prefetchData/sra/wags2/wags/wags/prep_subs.py \
+--meta /scratch/ss11645/LC/SRA/prefetchData/sra/wags2/DTA/download_data/input.csv \
+--fastqs /scratch/ss11645/LC/SRA/prefetchData/sra/wags2/DTA/download_data/ \
 --ref canfam4 \
---out /scratch/ss11645/LC/SRA/prefetchData/sra/download_data/out \
+--out /scratch/ss11645/LC/SRA/prefetchData/sra/wags2/DTA/download_data/out \
 --bucket RESULTS \
 --snake-env snakemake \
 --partition batch \
 --email ss11645@uga.edu \
 --account laclab \
---remote local \
---alias MINIO_ALIAS
 
 
