@@ -12,6 +12,7 @@
 
 cd $SLURM_SUBMIT_DIR
 
+#ml 
 ml purge
 ml Mamba/23.1.0-4
 
